@@ -44,7 +44,7 @@ func TestCreate(t *testing.T) {
 	assert.Equal(t, "plain text", m.PlainTextField, "Expected plain text field")
 	err = tc.FindId(m.ID).One(m)
 	assert.Equal(t, nil, err, "Expected record to be saved")
-	//assert.NotEqual(t, "crypto text", m.EncryptedField1, "Expected field to be encrypted in the DB")
+	assert.NotEqual(t, "crypto text", m.EncryptedField1, "Expected field to be encrypted in the DB")
 }
 
 func TestDelete(t *testing.T) {
@@ -115,10 +115,10 @@ func TestUpdate(t *testing.T) {
 		m.PlainTextField,
 		"Expected plain text field to be not encrypted")
 	tc.FindId(id).One(m)
-	// assert.NotEqual(t,
-	// 	"crypto text",
-	// 	m.EncryptedField1,
-	// 	"Expected encrypted field to be encrypted")
+	assert.NotEqual(t,
+		"crypto text",
+		m.EncryptedField1,
+		"Expected encrypted field to be encrypted")
 	assert.Equal(t,
 		"plain text",
 		m.PlainTextField,
@@ -206,7 +206,7 @@ func TestFindMany(t *testing.T) {
 	for i := 0; i < 3; i++ {
 		m := &mockModel{NumField: 42, EncryptedField1: "encrypted text"}
 		generateModelID(m)
-		//EncryptFields(m)
+		encryptFields(m)
 		tc.Insert(m)
 		mIds = append(mIds, m.ID)
 	}
@@ -214,8 +214,8 @@ func TestFindMany(t *testing.T) {
 	assert.Equal(t, nil, err, "No error expected")
 	for _, m := range models {
 		assert.Equal(t, 42, m.NumField, "ID field does not match")
-		// assert.NotEqual(t, "encrypted text", m.EncryptedField1, "Field returned is not encrypted")
-		// DecryptFields(&m)
+		assert.NotEqual(t, "encrypted text", m.EncryptedField1, "Field returned is not encrypted")
+		decryptFields(&m)
 		assert.Equal(t, "encrypted text", m.EncryptedField1, "Field is encrypted wrongly")
 	}
 

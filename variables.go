@@ -18,3 +18,4 @@ var (
 var ErrInvalidId = errors.New("invalid id")
 var ErrRecordNotFound = mgo.ErrNotFound
 var ErrMongoCollectionNotFetched = errors.New("mongo collection not fetched")
+var ErrMissingCryptoSecret = errors.New("missing crypto secret")

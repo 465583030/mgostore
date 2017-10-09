@@ -52,14 +52,19 @@ func (m mockModels) DBConfig() *MongoConfig {
 var testMongoConfig = func() *MongoConfig {
 
 	return &MongoConfig{Servers: os.Getenv("MONGODB_SERVERS"),
-		DBName: "wellhive_test",
+		DBName: "mgostore_test",
 		Timeout: func() time.Duration {
 			intTimeout := 100
 			return time.Duration(intTimeout) * time.Millisecond
 		}(),
+		CryptoConfig: &CryptoConfig{
+			AESSecret: []byte(testEncryptionSecret),
+		},
 	}
 }
 
 var testServers = func() string {
 	return os.Getenv("MONGODB_SERVERS")
 }
+
+const testEncryptionSecret string = "FB6AEC6DB7665BAFBEB75F68661584FD"

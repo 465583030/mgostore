@@ -24,8 +24,8 @@ func Update(m Model) error {
 	if c == nil {
 		return ErrMongoCollectionNotFetched
 	}
-	// TODO: values need to be encrypted
-	//EncryptFields(m)
+	// values need to be encrypted
+	encryptFields(m)
 
 	c.UpdateId(id, bson.M{"$set": m})
 	if err != nil {
@@ -59,8 +59,7 @@ func Find(m Model) error {
 	if err = c.FindId(id).One(m); err != nil {
 		return err
 	}
-	// TODO
-	//DecryptFields(m)
+	decryptFields(m)
 	return nil
 }
 
@@ -88,7 +87,7 @@ func Destroy(m Model) error {
 }
 
 /*
-Create in DB
+Create the model in DB
 */
 func Create(m Model) error {
 	session, err := newSession(m.DBConfig())
@@ -98,8 +97,7 @@ func Create(m Model) error {
 	if err != nil {
 		return err
 	}
-	// TODO
-	// EncryptFields(m)
+	encryptFields(m)
 	generateModelID(m)
 	c := fetchCollection(m, session)
 	if c == nil {
@@ -135,8 +133,7 @@ func FindBy(whereClause bson.M, m Model) error {
 	if err = c.Find(whereClause).One(m); err != nil {
 		return err
 	}
-	// TODO
-	//DecryptFields(m)
+	decryptFields(m)
 	return nil
 }
 
@@ -154,12 +151,6 @@ In case limit and skip is called, then please pass them in the options parameter
 eg, to have no skips but to have a limit of 10
 
 FindMany("my_awesome_models", bson.M{"some_field": "some_field_value"}, &models, -1, 10)
-
-// models is now encrypted
-for _, m := models {
-	Decrypt(&m)
-}
-// models is now decrypted
 */
 func FindMany(whereClause bson.M, models Models, options ...int) error {
 	session, err := newSession(models.DBConfig())
