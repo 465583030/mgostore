@@ -107,8 +107,9 @@ type Address struct {
 
 ## Testing
 First make sure you have mongoDB running on your machine.
+The project is maintained in [`govendor`](https://github.com/kardianos/govendor). 
 
 Run the tests for this package by running
 ```
-go test
+govendor test +local
 ```
