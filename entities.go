@@ -3,7 +3,7 @@ package mgostore
 import "time"
 
 /*
-This configuration struct determines the connection to the mongo DB.
+MongoConfig struct determines the connection to the mongo DB.
 */
 type MongoConfig struct {
 	// Define a comma separated array of Servers here
@@ -13,10 +13,17 @@ type MongoConfig struct {
 	Timeout time.Duration
 	// Specifies if the connection is SSL. This is important to use a tls.Dial function in that case due to limitations of mgo package
 	IsSSL bool
+	// configuration keys for encryption and decryption
+	CryptoConfig *CryptoConfig
+}
+
+// CryptoConfig represents the configuration keys of encryption secret
+type CryptoConfig struct {
+	AESSecret []byte
 }
 
 /*
-A model interface represents a storable entity
+Model interface represents a storable entity
 Two methods need to be defined for this.
 */
 type Model interface {

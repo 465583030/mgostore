@@ -24,7 +24,7 @@ func testMongoCollection() *mgo.Collection {
 }
 
 type mockModel struct {
-	Id              bson.ObjectId `json:"_id" bson:"_id,omitempty"`
+	ID              bson.ObjectId `json:"_id" bson:"_id,omitempty"`
 	EncryptedField1 string        `json:"encrypted_field1" bson:"encrypted_field1" encrypt:"aes"`
 	PlainTextField  string        `json:"plain_text_field" bson:"plain_text_field"`
 	NumField        int           `json:"num_field" bson:"num_field" encrypt:"aes"`
@@ -52,14 +52,19 @@ func (m mockModels) DBConfig() *MongoConfig {
 var testMongoConfig = func() *MongoConfig {
 
 	return &MongoConfig{Servers: os.Getenv("MONGODB_SERVERS"),
-		DBName: "wellhive_test",
+		DBName: "mgostore_test",
 		Timeout: func() time.Duration {
 			intTimeout := 100
 			return time.Duration(intTimeout) * time.Millisecond
 		}(),
+		CryptoConfig: &CryptoConfig{
+			AESSecret: []byte(testEncryptionSecret),
+		},
 	}
 }
 
 var testServers = func() string {
 	return os.Getenv("MONGODB_SERVERS")
 }
+
+const testEncryptionSecret string = "7E892875A52C59A3B588306B13C31FBD"
