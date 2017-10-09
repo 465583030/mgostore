@@ -67,4 +67,4 @@ var testServers = func() string {
 	return os.Getenv("MONGODB_SERVERS")
 }
 
-const testEncryptionSecret string = "FB6AEC6DB7665BAFBEB75F68661584FD"
+const testEncryptionSecret string = "7E892875A52C59A3B588306B13C31FBD"
