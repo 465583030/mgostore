@@ -24,7 +24,7 @@ func testMongoCollection() *mgo.Collection {
 }
 
 type mockModel struct {
-	Id              bson.ObjectId `json:"_id" bson:"_id,omitempty"`
+	ID              bson.ObjectId `json:"_id" bson:"_id,omitempty"`
 	EncryptedField1 string        `json:"encrypted_field1" bson:"encrypted_field1" encrypt:"aes"`
 	PlainTextField  string        `json:"plain_text_field" bson:"plain_text_field"`
 	NumField        int           `json:"num_field" bson:"num_field" encrypt:"aes"`
