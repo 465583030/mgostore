@@ -1,12 +1,12 @@
 # mgostore
-An ORM like adaptor to store structs in mongo DB
+An ORM like adaptor to store structs in mongo DB. This heavily uses the external mongo library [mgo](http://labix.org/mgo)
 
 ## Description
-This package is designed in such a way that it could be used easily to have operations on models.
+This package is designed in such a way that it could be used easily to have operations on models (structs which can be stored as documents in mongo).
 
 We would create a model called `MyAwesomeModel`
 Create a struct with the field. It should compulsorily have one field, viz.,
-`Id` which is the `\_id` in the mongoDB storage. This is of type `bson.ObjectId`, so you will need to parse it into Hex string when you get it as a string from GET requests.
+`ID` which is the `\_id` in the mongoDB storage. This is of type `bson.ObjectId`, so you will need to parse it into Hex string when you get it as a string from GET requests.
 
 For fields which you do not want to show up in the json responses have the tag `json:"-"`
 Binary json tags would be used to unmarshall this struct to the mongoDb document.
@@ -18,7 +18,7 @@ Right now, only this option is supported for encryption
 
 ```go
 type MyAwesomeModel struct {
-	Id               bson.ObjectId `json:"id" bson:"_id,omitempty"`
+	ID               bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	MyAwesomeField   string `json:"my_awesome_field" bson:"my_awesome_field"`
 	AnEncryptedField string `json:"an_encrypted_field" bson:"an_encrypted_field" encrypt:"aes"`
 }
@@ -44,12 +44,12 @@ func (_ *MyAwesomeModel) CollectionName() string {
 ```
 You also need to specify the config which the model should use to connect to the MongoDB. This gives you the flexibility to have multiple DB connections in the same application. This can be done by simply adding the method `DBConfig()`.
 ```go
-func (_ *MyAwesomeModel) DBConfig() *store.MongoConfig {
+func (_ *MyAwesomeModel) DBConfig() *mgostore.MongoConfig {
 	return &mgostore.MongoConfig{
 		Servers: "localhost",
 		DBName: "test",
 		Timeout: 500,
-    CryptoConfig: &mgostore.CryptoConfig{AESSecret: []byte("SOMEKEYSECRET")},
+    		CryptoConfig: &mgostore.CryptoConfig{AESSecret: []byte("SOMEKEYSECRET")},
 	}
 }
 ```
